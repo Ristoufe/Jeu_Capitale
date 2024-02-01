@@ -74,6 +74,7 @@ var liste_ereurs = [];
 
 //Variables Options
 var options = {
+	enable_flags : true,
 	mode_de_jeu : "simple",
 	nombre_pays : 198,
 	liste_pays_stable : MONDE_FR,
@@ -127,7 +128,12 @@ function jouer_difficile() {
 function tour_suivant_difficile() {
 	if (tour < options.nombre_pays) {
 		pays = liste_pays.splice(randint(0, liste_pays.length - 1), 1);
-		PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><img src="Drapeaux\\Flag_of_' + TRAD[pays] + '.svg" alt="Drapeau de ' + pays + '" width="250" height="166"><br><br><input type="text" id="reponse" onkeypress="reponse(event)"><br><p>' + score + ' / ' + tour + '</p>';
+		if (options.enable_flags) {
+			PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><img src="Drapeaux\\Flag_of_' + TRAD[pays] + '.svg" alt="Drapeau de ' + pays + '" width="250" height="166"><br><br><input type="text" id="reponse" onkeypress="reponse(event)"><br><p>' + score + ' / ' + tour + '</p>';
+		}
+		else {
+			PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><input type="text" id="reponse" onkeypress="reponse(event)"><br><p>' + score + ' / ' + tour + '</p>';
+		}
 		document.getElementById("reponse").focus();
 		tour++;
 	}
@@ -184,8 +190,14 @@ function jouer_simple() {
 
 function tour_suivant_simple() {
 	if (tour < options.nombre_pays) {
+		
 		pays = liste_pays.splice(randint(0, liste_pays.length - 1), 1);
-		PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><img src="Drapeaux\\Flag_of_' + TRAD[pays] + '.svg" alt="Drapeau de ' + pays + '" width="250" height="166"><br><br><button onclick="reveler_capitale()">Reveler la capitale</button><p>' + score + ' / ' + tour + '</p>';
+		if (options.enable_flags) {
+			PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><img src="Drapeaux\\Flag_of_' + TRAD[pays] + '.svg" alt="Drapeau de ' + pays + '" width="250" height="166"><br><br><button onclick="reveler_capitale()">Reveler la capitale</button><p>' + score + ' / ' + tour + '</p>';
+		}
+		else {
+			PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><button onclick="reveler_capitale()">Reveler la capitale</button><p>' + score + ' / ' + tour + '</p>';
+		}
 		tour++;
 	}
 	else {
@@ -278,9 +290,12 @@ function nb_pays(nombre) {
 
 
 function option() {
-	PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p>Mode de Jeu :</p><label for="simple">Simple</label><input type="radio" name="options.mode_de_jeu" id="simple" value="simple" onChange="options.mode_de_jeu = this.value"><br><label for="difficile">Difficile</label><input type="radio" name="options.mode_de_jeu" id="difficile" value="difficile" onChange="options.mode_de_jeu = this.value"><p>Nombre de pays :</p><input type=number value="' + options.nombre_pays + '" id="options.nombre_pays" onInput="nb_pays(this.value)"><p>Pays :</p><p>Afrique<input type="checkbox" onChange="selection_pays(this.id)" id="afrique"><br>Amerique<input type="checkbox" onChange="selection_pays(this.id)" id="amerique"><br>Asie<input type="checkbox" onChange="selection_pays(this.id)" id="asie"><br>Europe<input type="checkbox" onChange="selection_pays(this.id)" id="europe"><br>Oceanie<input type="checkbox" onChange="selection_pays(this.id)" id="oceanie"><br>Erreurs<input type="checkbox" onChange="erreur()" id="erreur"></p>';
+	PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p>Drapeaux :<input type="checkbox" id="flags_checkbox" onChange="options.enable_flags = this.checked"></p><p>Mode de Jeu :</p><label for="simple">Simple</label><input type="radio" name="options.mode_de_jeu" id="simple" value="simple" onChange="options.mode_de_jeu = this.value"><br><label for="difficile">Difficile</label><input type="radio" name="options.mode_de_jeu" id="difficile" value="difficile" onChange="options.mode_de_jeu = this.value"><p>Nombre de pays :</p><input type=number value="' + options.nombre_pays + '" id="options.nombre_pays" onInput="nb_pays(this.value)"><p>Pays :</p><p>Afrique<input type="checkbox" onChange="selection_pays(this.id)" id="afrique"><br>Amerique<input type="checkbox" onChange="selection_pays(this.id)" id="amerique"><br>Asie<input type="checkbox" onChange="selection_pays(this.id)" id="asie"><br>Europe<input type="checkbox" onChange="selection_pays(this.id)" id="europe"><br>Oceanie<input type="checkbox" onChange="selection_pays(this.id)" id="oceanie"><br>Erreurs<input type="checkbox" onChange="erreur()" id="erreur"></p>';
 	for (let continent in options.continents_selectionnes) {
 		document.getElementById(continent).checked = options.continents_selectionnes[continent];
+	}
+	if (options.enable_flags) {
+		document.getElementById("flags_checkbox").checked = true;
 	}
 	if (options.mode_de_jeu == "simple") {
 		document.getElementById("simple").checked = true;
