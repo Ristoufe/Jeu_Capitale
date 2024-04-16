@@ -31,6 +31,12 @@ TRANSLATION_TABLE =
     "Europe": ["Europe", "Europe"],
     "Oceania": ["Oceania", "Oceanie"],
     "Errors": ["Errors", "Erreurs"],
+    "Only Flags": ["Only flags", "Drapeaux seulement"],
+    "Flag To Guess": ["Flag to guess", "Drapeau à deviner"],
+    "Instruction Flag Only Country": ["From which country is this flag from ?", "De quel pays est-ce le drapeau ?"],
+    "Instruction Flag Only Capital": ["What is the capital of this country ?", "Quelle est la capitale de ce pays ?"],
+    "Correct, The Country Was": ["Correct, the flag was the flag of ", "Correct, le drapeau était celui de "],
+    "Incorrect, The Country Was": ["Incorrect, the flag was the flag of ", "Faux, le drapeau était celui de "],
     
     "South_Africa": ["South Africa", "Afrique du Sud"],
     "Afghanistan": ["Afghanistan", "Afghanistan"],

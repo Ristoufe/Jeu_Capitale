@@ -14,13 +14,15 @@ function tt(hash) {
 	return TRANSLATION_TABLE[hash][language];
 }
 
+
+// Update front page for selected language
 document.getElementById("p_title").innerHTML = tt("Title");
 document.getElementById("button_start_game").innerHTML = tt("Play");
 document.getElementById("button_options").innerHTML = tt("Options");
 
 
 
-//Utils
+// Utils
 
 function randint(min, max) {
 	return (Math.round(Math.random()*max + min));
@@ -42,7 +44,7 @@ function is_similar(str1, str2) {
 
 
 
-//Variables
+// Variables
 
 let current_score = 0;
 let current_turn = 0;
@@ -52,7 +54,7 @@ let is_return_pressed = true;
 const PRINCIPALE = document.getElementById("principale");
 let errors = [];
 
-//Variables Options
+// Variables Options
 let options = {
 	enable_flags : true,
 	gamemode : "simple",
@@ -69,7 +71,7 @@ let options = {
 
 
 
-//Acceuil
+// #region Menu
 
 function start_game() {
 	remaining_countries = [...options.selected_countries];
@@ -80,6 +82,9 @@ function start_game() {
 			break;
 		case "hard":
 			next_turn_hard();
+			break;
+		case "flag_only":
+			next_turn_flag_only();
 			break;
 	}
 }
@@ -93,12 +98,6 @@ function restart() {
 		'<br><button onclick="show_options()">' + tt("Options") + '</button>';
 }
 
-
-
-
-
-
-
 function show_end_game() {
 	PRINCIPALE.innerHTML =
 		'<p>' + tt("You Have Finished") +
@@ -107,8 +106,10 @@ function show_end_game() {
 		'<button onclick="restart()">' + tt("Restart") + '</button>';
 }
 
+// #endregion
 
-// Hard
+
+// #region Hard
 
 function next_turn_hard() {
 	if (current_turn < options.number_of_country) {
@@ -117,7 +118,7 @@ function next_turn_hard() {
 		PRINCIPALE.innerHTML =
 			'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
 			'<p>' + tt("Instruction") + tt(selected_country) + '</p>' +
-			'<input type="text" id="input_answer" onkeypress="give_answer(event)">' +
+			'<input type="text" id="input_answer" onkeypress="give_answer_hard(event)">' +
 			'<br>' +
 			'<p>' + current_score + ' / ' + current_turn + '</p>';
 
@@ -151,7 +152,7 @@ function remove_enter_listener() {
 	document.removeEventListener('keyup', handle_enter_down, true);
 }
 
-function give_answer(event) {
+function give_answer_hard(event) {
 	let given_answer = document.getElementById("input_answer").value;
 	if (event.key != "Enter" || given_answer == "") {
 		return;
@@ -161,7 +162,7 @@ function give_answer(event) {
 	is_return_pressed = true;
 
 	PRINCIPALE.innerHTML =
-		'<button onclick="restart(); removeListener()" id="button_back">' + tt("Back") + '</button>' +
+		'<button onclick="restart(); remove_enter_listener()" id="button_back">' + tt("Back") + '</button>' +
 		'<p id="p_text"></p>' +
 		'<button onclick="next_turn_hard(); remove_enter_listener()">' + tt("Continue") + '</button>' +
 		'<p id="p_score"></p>';
@@ -182,15 +183,10 @@ function give_answer(event) {
 }
 
 
+// #endregion
 
 
-
-
-
-
-
-
-//Simple
+// #region Simple
 
 function next_turn_simple() {
 	if (current_turn < options.number_of_country) {
@@ -241,16 +237,109 @@ function validate_incorrect_answer() {
 	next_turn_simple();
 }
 
+// #endregion
 
 
+// #region Flag Only
 
+function next_turn_flag_only() {
+	if (current_turn < options.number_of_country) {
+		selected_country = remaining_countries.splice(randint(0, remaining_countries.length - 1), 1);
 
+		PRINCIPALE.innerHTML =
+			'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
+			'<br>' +
+			'<p>' + tt("Instruction Flag Only Country") + '</p>' +
+			'<img src="Drapeaux\\Flag_of_' + selected_country + '.svg" alt="' + tt("Flag To Guess") + '" width="250" height="166">' +
+			'<br>' +
+			'<br>' +
+			'<input type="text" id="input_answer" onkeypress="give_country_flag_only(event)">' +
+			'<br>' +
+			'<p>' + current_score + ' / ' + current_turn + '</p>';
+		
+		document.getElementById("input_answer").focus();
+		current_turn++;
+		return;
+	}
+	show_end_game();
+}
 
+function handle_enter_down_flag_only(eventKeyboard) {
+	if (eventKeyboard.key == "Enter" && !is_return_pressed) {
+		next_turn_flag_only();
+		remove_flag_only_listener();
+	}
+	is_return_pressed = false;
+}
 
+function remove_flag_only_listener() {
+	document.removeEventListener('keyup', handle_enter_down_flag_only, true);
+}
 
+function give_country_flag_only(event) {
+	let given_answer = document.getElementById("input_answer").value;
+	if (event.key != "Enter" || given_answer == "") {
+		return;
+	}
 
+	PRINCIPALE.innerHTML =
+		'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
+		'<p id="p_text"></p>' +
+		'<p>' + tt("Instruction Flag Only Capital") + '</p>' +
+		'<input type="text" id="input_answer" onkeypress="give_capital_flag_only(event)">' +
+		'<p id="p_score"></p>';
 
-//Options
+	document.getElementById("input_answer").focus();
+
+	if (is_similar(given_answer, tt(selected_country))) {
+		document.getElementById("p_text").innerHTML = 
+			tt("Correct, The Country Was") + tt(selected_country) +
+			'<br>' +
+			'+1';
+		current_score++;
+	}
+	else {
+		document.getElementById("p_text").innerHTML =
+			tt("Incorrect, The Country Was") + tt(selected_country);
+			errors.push(selected_country[0]);
+	}
+	document.getElementById("p_score").innerHTML = current_score + ' / ' + current_turn;
+}
+
+function give_capital_flag_only(event) {
+	let given_answer = document.getElementById("input_answer").value;
+	if (event.key != "Enter" || given_answer == "") {
+		return;
+	}
+
+	document.addEventListener('keyup', handle_enter_down_flag_only, true);
+	is_return_pressed = true;
+
+	PRINCIPALE.innerHTML =
+		'<button onclick="restart(); remove_enter_listener()" id="button_back">' + tt("Back") + '</button>' +
+		'<p id="p_text"></p>' +
+		'<button onclick="next_turn_hard(); remove_enter_listener()">' + tt("Continue") + '</button>' +
+		'<p id="p_score"></p>';
+	current_turn++;
+
+	if (is_similar(given_answer, tt(COUNTRIES[selected_country]["capital"]))) {
+		document.getElementById("p_text").innerHTML = 
+			tt("Correct The Capital Of") + tt(selected_country) + tt("Is") + tt(COUNTRIES[selected_country]["capital"]) +
+			'<br>' +
+			'+1';
+		current_score++;
+	}
+	else {
+		document.getElementById("p_text").innerHTML =
+			tt("Incorrect The Capital Of") + tt(selected_country) + tt("Is") + tt(COUNTRIES[selected_country]["capital"]);
+			errors.push(selected_country[0]);
+	}
+	document.getElementById("p_score").innerHTML = current_score + ' / ' + current_turn;
+}
+
+// #endregion
+
+// #region Options
 
 function choose_continent(continent) {
 	// If nothing is choosen then do nothing
@@ -333,10 +422,13 @@ function show_options() {
 		'<p>' + tt("Flags") + ' :<input type="checkbox" id="flag_checkbox" onChange="options.enable_flags = this.checked"></p>' +
 		'<p>' + tt("Gamemode") + ' :</p>' +
 		'<label for="simple">' + tt("Simple") + '</label>' +
-		'<input type="radio" name="options.gamemode" id="simple" value="simple" onChange="options.gamemode = this.value">' +
+		'<input type="radio" name="radio_gamemode" id="simple" value="simple" onChange="options.gamemode = this.value">' +
 		'<br>' +
 		'<label for="hard">' + tt("Hard") + '</label>' +
-		'<input type="radio" name="options.gamemode" id="hard" value="hard" onChange="options.gamemode = this.value">' +
+		'<input type="radio" name="radio_gamemode" id="hard" value="hard" onChange="options.gamemode = this.value">' +
+		'<br>' +
+		'<label for="flag_only">' + tt("Only Flags") + '</label>' +
+		'<input type="radio" name="radio_gamemode" id="flag_only" value="flag_only" onChange="options.gamemode = this.value">' +
 		'<p>' + tt("Number Of Country") + ' :</p>' +
 		'<input type=number value="' + options.selected_countries.length + '" id="options.number_of_country" onInput="update_number_of_country(this.value)">' +
 		'<p>' + tt("Countries") + ' :</p>' +
@@ -353,10 +445,7 @@ function show_options() {
 	if (options.enable_flags) {
 		document.getElementById("flag_checkbox").checked = true;
 	}
-	if (options.gamemode == "simple") {
-		document.getElementById("simple").checked = true;
-	}
-	else{
-		document.getElementById("hard").checked = true;
-	}
+	document.getElementById(options.gamemode).checked = true;
 }
+
+// #endregion
