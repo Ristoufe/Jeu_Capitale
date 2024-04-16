@@ -116,7 +116,7 @@ function next_turn_hard() {
 
 		PRINCIPALE.innerHTML =
 			'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
-			'<p>' + tt("Instruction") + selected_country + '</p>' +
+			'<p>' + tt("Instruction") + tt(selected_country) + '</p>' +
 			'<input type="text" id="input_answer" onkeypress="give_answer(event)">' +
 			'<br>' +
 			'<p>' + current_score + ' / ' + current_turn + '</p>';
@@ -124,7 +124,7 @@ function next_turn_hard() {
 		if (options.enable_flags) {
 			let img_flag = document.createElement("img");
 			img_flag.src = "Drapeaux\\Flag_of_" + selected_country + ".svg";
-			img_flag.alt = tt("Flag Of") + selected_country;
+			img_flag.alt = tt("Flag Of") + tt(selected_country);
 			img_flag.width = 250;
 			img_flag.height = 166;
 			PRINCIPALE.insertBefore(img_flag, document.getElementById("input_answer"));
@@ -166,16 +166,16 @@ function give_answer(event) {
 		'<button onclick="next_turn_hard(); remove_enter_listener()">' + tt("Continue") + '</button>' +
 		'<p id="p_score"></p>';
 
-	if (is_similar(given_answer, COUNTRIES[selected_country]["capital"])) {
+	if (is_similar(given_answer, tt(COUNTRIES[selected_country]["capital"]))) {
 		document.getElementById("p_text").innerHTML = 
-			tt("Correct The Capital Of") + selected_country + tt("Is") + COUNTRIES[selected_country]["capital"] +
+			tt("Correct The Capital Of") + tt(selected_country) + tt("Is") + tt(COUNTRIES[selected_country]["capital"]) +
 			'<br>' +
 			'+1';
 		current_score++;
 	}
 	else {
 		document.getElementById("p_text").innerHTML =
-			tt("Incorrect The Capital Of") + selected_country + tt("Is") + COUNTRIES[selected_country]["capital"];
+			tt("Incorrect The Capital Of") + tt(selected_country) + tt("Is") + tt(COUNTRIES[selected_country]["capital"]);
 			errors.push(selected_country[0]);
 	}
 	document.getElementById("p_score").innerHTML = current_score + ' / ' + current_turn;
@@ -197,7 +197,7 @@ function next_turn_simple() {
 		selected_country = remaining_countries.splice(randint(0, remaining_countries.length - 1), 1);
 		PRINCIPALE.innerHTML =
 			'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
-			'<p>' + tt("Instruction") + selected_country + '</p>' +
+			'<p>' + tt("Instruction") + tt(selected_country) + '</p>' +
 			'<button onclick="reveal_answer()" id="button_reveal">' + tt("Reveal Capital") + '</button>' +
 			'<p>' + current_score + ' / ' + current_turn + '</p>';
 		
@@ -205,7 +205,7 @@ function next_turn_simple() {
 		if (options.enable_flags) {
 			let img_flag = document.createElement("img");
 			img_flag.src = "Drapeaux\\Flag_of_" + selected_country + ".svg";
-			img_flag.alt = tt("Flag Of") + selected_country;
+			img_flag.alt = tt("Flag Of") + tt(selected_country);
 			img_flag.width = 250;
 			img_flag.height = 166;
 			PRINCIPALE.insertBefore(img_flag, document.getElementById("button_reveal"));
@@ -223,7 +223,7 @@ function next_turn_simple() {
 function reveal_answer() {
 	PRINCIPALE.innerHTML =
 		'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
-		'<p>' + tt("The Capital Of") + selected_country + tt("Is") + COUNTRIES[selected_country]["capital"] + '. ' + tt("Where You Right") + ' ?</p>' +
+		'<p>' + tt("The Capital Of") + tt(selected_country) + tt("Is") + tt(COUNTRIES[selected_country]["capital"]) + '. ' + tt("Where You Right") + ' ?</p>' +
 		'<button onclick="validate_correct_answer()">' + tt("Yes") + '</button>' +
 		'<button onclick="validate_incorrect_answer()">' + tt("No") + '</button><p>' +
 		current_score + ' / ' + (current_turn - 1) + '</p>';
