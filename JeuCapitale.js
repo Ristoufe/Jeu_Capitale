@@ -1,56 +1,36 @@
-const MONDE_EN = ["Cook_Islands","Niue","Afghanistan","Albania","Algeria","Andorra","Angola","Antigua_and_Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia_and_Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina_Faso","Burundi","Cambodia","Cameroon","Canada","Cape_Verde","Central_African_Republic","Chad","Chile","China","Colombia","Comoros","Democratic_Republic_of_the_Congo","Republic_of_the_Congo","Costa_Rica","Croatia","Cuba","Cyprus","Czech_Republic","Denmark","Djibouti","Dominica","Dominican_Republic","East_Timor","Ecuador","Egypt","El_Salvador","Equatorial_Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Ivory_Coast","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","North_Korea","South_Korea","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall_Islands","Mauritania","Mauritius","Mexico","Federated_States_of_Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New_Zealand","Nicaragua","Niger","Nigeria","North_Macedonia","Norway","Oman","Pakistan","Palestine","Palau","Panama","Papua_New_Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint_Kitts_and_Nevis","Saint_Lucia","Saint_Vincent_and_the_Grenadines","Samoa","San_Marino","Sao_Tome_and_Principe","Saudi_Arabia","Senegal","Serbia","Seychelles","Sierra_Leone","Singapore","Slovakia","Slovenia","Solomon_Islands","Somalia","South_Africa","Spain","Sri_Lanka","Sudan","South_Sudan","Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Togo","Tonga","Trinidad_and_Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United_Arab_Emirates","United_Kingdom","United_States","Uruguay","Uzbekistan","Vanuatu","Vatican_City","Venezuela","Vietnam","Yemen","Zambia"];
+COUNTRIES_PER_CONTINENT = {"world": [], "africa": [], "america": [], "asia": [], "europe": [], "oceania": []}
 
-const TRAD = {"Afrique du Sud":"South_Africa","Afghanistan":"Afghanistan","Albanie":"Albania","Algérie":"Algeria","Allemagne":"Germany","Andorre":"Andorra","Angola":"Angola","Antigua-et-Barbuda":"Antigua_and_Barbuda","Arabie Saoudite":"Saudi_Arabia","Argentine":"Argentina","Arménie":"Armenia","Australie":"Australia","Autriche":"Austria","Azerbaïdjan":"Azerbaijan","Bahamas":"Bahamas","Bahreïn":"Bahrain","Bangladesh":"Bangladesh","Barbade":"Barbados","Belgique":"Belgium","Belize":"Belize","Bénin":"Benin","Bhoutan":"Bhutan","Biélorussie":"Belarus","Birmanie":"Myanmar","Bolivie":"Bolivia","Bosnie-Herzégovine":"Bosnia_and_Herzegovina","Botswana":"Botswana","Brésil":"Brazil","Brunei":"Brunei","Bulgarie":"Bulgaria","Burkina Faso":"Burkina_Faso","Burundi":"Burundi","Cambodge":"Cambodia","Cameroun":"Cameroon","Canada":"Canada","Cap-Vert":"Cape_Verde","Chili":"Chile","Chine":"China","Chypre":"Cyprus","Colombie":"Colombia","Comores":"Comoros","Corée du Nord":"North_Korea","Corée du Sud":"South_Korea","Costa Rica":"Costa_Rica","Côte d\'Ivoire":"Ivory_Coast","Croatie":"Croatia","Cuba":"Cuba","Danemark":"Denmark","Djibouti":"Djibouti","Dominique":"Dominica","Égypte":"Egypt","Émirats arabes unis":"United_Arab_Emirates","Équateur":"Ecuador","Érythrée":"Eritrea","Espagne":"Spain","Eswatini":"Eswatini","Estonie":"Estonia","États-Unis":"United_States","Éthiopie":"Ethiopia","Fidji":"Fiji","Finlande":"Finland","France":"France","Gabon":"Gabon","Gambie":"Gambia","Géorgie":"Georgia","Ghana":"Ghana","Grèce":"Greece","Grenade":"Grenada","Guatemala":"Guatemala","Guinée":"Guinea","Guinée équatoriale":"Equatorial_Guinea","Guinée-Bissau":"Guinea-Bissau","Guyana":"Guyana","Haïti":"Haiti","Honduras":"Honduras","Hongrie":"Hungary","Îles Cook":"Cook_Islands","Îles Marshall":"Marshall_Islands","Inde":"India","Indonésie":"Indonesia","Irak":"Iraq","Iran":"Iran","Irlande":"Ireland","Islande":"Iceland","Israël":"Israel","Italie":"Italy","Jamaïque":"Jamaica","Japon":"Japan","Jordanie":"Jordan","Kazakhstan":"Kazakhstan","Kenya":"Kenya","Kirghizistan":"Kyrgyzstan","Kiribati":"Kiribati","Kosovo":"Kosovo","Koweït":"Kuwait","Laos":"Laos","Lesotho":"Lesotho","Lettonie":"Latvia","Liban":"Lebanon","Liberia":"Liberia","Libye":"Libya","Liechtenstein":"Liechtenstein","Lituanie":"Lithuania","Luxembourg":"Luxembourg","Macédoine du nord":"North_Macedonia","Madagascar":"Madagascar","Malaisie":"Malaysia","Malawi":"Malawi","Maldives":"Maldives","Mali":"Mali","Malte":"Malta","Maroc":"Morocco","Maurice":"Mauritius","Mauritanie":"Mauritania","Mexique":"Mexico","Micronésie":"Federated_States_of_Micronesia","Moldavie":"Moldova","Monaco":"Monaco","Mongolie":"Mongolia","Monténégro":"Montenegro","Mozambique":"Mozambique","Namibie":"Namibia","Nauru":"Nauru","Népal":"Nepal","Nicaragua":"Nicaragua","Niger":"Niger","Nigeria":"Nigeria","Niue":"Niue","Norvège":"Norway","Nouvelle-Zélande":"New_Zealand","Oman":"Oman","Ouganda":"Uganda","Ouzbékistan":"Uzbekistan","Pakistan":"Pakistan","Palaos":"Palau","Palestine":"Palestine","Panama":"Panama","Papouasie-Nouvelle-Guinée":"Papua_New_Guinea","Paraguay":"Paraguay","Pays-Bas":"Netherlands","Pérou":"Peru","Philippines":"Philippines","Pologne":"Poland","Portugal":"Portugal","Qatar":"Qatar","République centrafricaine":"Central_African_Republic","République démocratique du Congo":"Democratic_Republic_of_the_Congo","République Dominicaine":"Dominican_Republic","République du Congo":"Republic_of_the_Congo","République tchèque":"Czech_Republic","Roumanie":"Romania","Royaume-Uni":"United_Kingdom","Russie":"Russia","Rwanda":"Rwanda","Saint-Kitts-et-Nevis":"Saint_Kitts_and_Nevis","Saint-Vincent-et-les-Grenadines":"Saint_Vincent_and_the_Grenadines","Sainte-Lucie":"Saint_Lucia","Saint-Marin":"San_Marino","Salomon":"Solomon_Islands","Salvador":"El_Salvador","Samoa":"Samoa","São Tomé-et-Principe":"Sao_Tome_and_Principe","Sénégal":"Senegal","Serbie":"Serbia","Seychelles":"Seychelles","Sierra Leone":"Sierra_Leone","Singapour":"Singapore","Slovaquie":"Slovakia","Slovénie":"Slovenia","Somalie":"Somalia","Soudan":"Sudan","Soudan du Sud":"South_Sudan","Sri Lanka":"Sri_Lanka","Suède":"Sweden","Suisse":"Switzerland","Suriname":"Suriname","Syrie":"Syria","Tadjikistan":"Tajikistan","Tanzanie":"Tanzania","Tchad":"Chad","Thaïlande":"Thailand","Timor oriental":"East_Timor","Togo":"Togo","Tonga":"Tonga","Trinité-et-Tobago":"Trinidad_and_Tobago","Tunisie":"Tunisia","Turkménistan":"Turkmenistan","Turquie":"Turkey","Tuvalu":"Tuvalu","Ukraine":"Ukraine","Uruguay":"Uruguay","Vanuatu":"Vanuatu","Vatican":"Vatican_City","Venezuela":"Venezuela","Viêt Nam":"Vietnam","Yémen":"Yemen","Zambie":"Zambia","Zimbabwe":"Zimbabwe"};
-
-const CAPITALES = ["Pretoria","Kaboul","Tirana","Alger","Berlin","Andorre-la-Vieille","Luanda","Saint John’s","Riyad","Buenos Aires","Erevan","Canberra","Vienne","Bakou","Nassau","Manama","Dacca","Bridgetown","Bruxelles","Belmopan","Porto-Novo","Thimphou","Minsk","Naypyidaw","Sucre","Sarajevo","Gaborone","Brasilia","Bandar Seri Begawan","Sofia","Ouagadougou","Gitega","Phnom Penh","Yaoundé","Ottawa","Praia","Santiago","Pékin","Nicosie","Bogota","Moroni","Pyongyang","Séoul","San José","Yamoussoukro","Zagreb","La Havane","Copenhague","Djibouti","Roseau","Le Caire","Abou Dabi","Quito","Asmara","Madrid","Mbabane","Tallinn","Washington","Addis-Abeba","Suva","Helsinki","Paris","Libreville","Banjul","Tbilissi","Accra","Athènes","Saint-Georges","Guatemala","Conakry","Malabo","Bissau","Georgetown","Port-au-Prince","Tegucigalpa","Budapest","Avarua","Majuro","New Delhi","Jakarta","Bagdad","Téhéran","Dublin","Reykjavik","Jérusalem","Rome","Kingston","Tokyo","Amman","Noursoultan","Nairobi","Bichkek","Tarawa-Sud","Pristina","Koweït","Vientiane","Maseru","Riga","Beyrouth","Monrovia","Tripoli","Vaduz","Vilnius","Luxembourg","Skopje","Antananarivo","Kuala Lumpur","Lilongwe","Malé","Bamako","La Valette","Rabat","Port-Louis","Nouakchott","Mexico","Palikir","Chișinău","Monaco","Oulan-Bator","Podgorica","Maputo","Windhoek","Yaren","Katmandou","Managua","Niamey","Abuja","Alofi","Oslo","Wellington","Mascate","Kampala","Tachkent","Islamabad","Ngerulmud","Ramallah","Panama","Port Moresby","Asuncion","Amsterdam","Lima","Manille","Varsovie","Lisbonne","Doha","Bangui","Kinshasa","Saint-Domingue","Brazzaville","Prague","Bucarest","Londres","Moscou","Kigali","Basseterre","Kingstown","Castries","Saint-Marin","Honiara","San Salvador","Apia","São Tomé","Dakar","Belgrade","Victoria","Freetown","Singapour","Bratislava","Ljubljana","Mogadiscio","Khartoum","Djouba","Sri Jayawardenapura","Stockholm","Berne","Paramaribo","Damas","Douchanbé","Dodoma","N’Djaména","Bangkok","Dili","Lomé","Nukuʻalofa","Port-d’Espagne","Tunis","Achgabat","Ankara","Funafuti","Kiev","Montevideo","Port-Vila","Vatican","Caracas","Hanoï","Sanaa","Lusaka","Harare"];
-
-const MONDE_FR = ["Afrique du Sud","Afghanistan","Albanie","Algérie","Allemagne","Andorre","Angola","Antigua-et-Barbuda","Arabie Saoudite","Argentine","Arménie","Australie","Autriche","Azerbaïdjan","Bahamas","Bahreïn","Bangladesh","Barbade","Belgique","Belize","Bénin","Bhoutan","Biélorussie","Birmanie","Bolivie","Bosnie-Herzégovine","Botswana","Brésil","Brunei","Bulgarie","Burkina Faso","Burundi","Cambodge","Cameroun","Canada","Cap-Vert","Chili","Chine","Chypre","Colombie","Comores","Corée du Nord","Corée du Sud","Costa Rica","Côte d\'Ivoire","Croatie","Cuba","Danemark","Djibouti","Dominique","Égypte","Émirats arabes unis","Équateur","Érythrée","Espagne","Eswatini","Estonie","États-Unis","Éthiopie","Fidji","Finlande","France","Gabon","Gambie","Géorgie","Ghana","Grèce","Grenade","Guatemala","Guinée","Guinée équatoriale","Guinée-Bissau","Guyana","Haïti","Honduras","Hongrie","Îles Cook","Îles Marshall","Inde","Indonésie","Irak","Iran","Irlande","Islande","Israël","Italie","Jamaïque","Japon","Jordanie","Kazakhstan","Kenya","Kirghizistan","Kiribati","Kosovo","Koweït","Laos","Lesotho","Lettonie","Liban","Liberia","Libye","Liechtenstein","Lituanie","Luxembourg","Macédoine du nord","Madagascar","Malaisie","Malawi","Maldives","Mali","Malte","Maroc","Maurice","Mauritanie","Mexique","Micronésie","Moldavie","Monaco","Mongolie","Monténégro","Mozambique","Namibie","Nauru","Népal","Nicaragua","Niger","Nigeria","Niue","Norvège","Nouvelle-Zélande","Oman","Ouganda","Ouzbékistan","Pakistan","Palaos","Palestine","Panama","Papouasie-Nouvelle-Guinée","Paraguay","Pays-Bas","Pérou","Philippines","Pologne","Portugal","Qatar","République centrafricaine","République démocratique du Congo","République Dominicaine","République du Congo","République tchèque","Roumanie","Royaume-Uni","Russie","Rwanda","Saint-Kitts-et-Nevis","Saint-Vincent-et-les-Grenadines","Sainte-Lucie","Saint-Marin","Salomon","Salvador","Samoa","São Tomé-et-Principe","Sénégal","Serbie","Seychelles","Sierra Leone","Singapour","Slovaquie","Slovénie","Somalie","Soudan","Soudan du Sud","Sri Lanka","Suède","Suisse","Suriname","Syrie","Tadjikistan","Tanzanie","Tchad","Thaïlande","Timor oriental","Togo","Tonga","Trinité-et-Tobago","Tunisie","Turkménistan","Turquie","Tuvalu","Ukraine","Uruguay","Vanuatu","Vatican","Venezuela","Viêt Nam","Yémen","Zambie","Zimbabwe"];
-
-const EUROPE = ["Albanie","Allemagne","Andorre","Autriche","Belgique","Biélorussie","Bosnie-Herzégovine","Bulgarie","Chypre","Croatie","Danemark","Espagne","Estonie","Finlande","France","Grèce","Hongrie","Irlande","Islande","Italie","Kosovo","Lettonie","Liechtenstein","Lituanie","Luxembourg","Macédoine du nord","Malte","Moldavie","Monaco","Monténégro","Norvège","Pays-Bas","Pologne","Portugal","République tchèque","Roumanie","Royaume-Uni","Russie","Saint-Marin","Serbie","Slovaquie","Slovénie","Suède","Suisse","Ukraine","Vatican"]
-
-const AFRIQUE = ["Afrique du Sud","Algérie","Angola","Bénin","Botswana","Burkina Faso","Burundi","Cameroun","Cap-Vert","République centrafricaine","Comores","République du Congo","République démocratique du Congo","Côte d\'Ivoire","Djibouti","Égypte","Érythrée","Eswatini","Éthiopie","Gabon","Gambie","Ghana","Guinée","Guinée-Bissau","Guinée équatoriale","Kenya","Lesotho","Liberia","Libye","Madagascar","Malawi","Mali","Maroc","Maurice","Mauritanie","Mozambique","Namibie","Niger","Nigeria","Ouganda","Rwanda","São Tomé-et-Principe","Sénégal","Seychelles","Sierra Leone","Somalie","Soudan","Soudan du Sud","Tanzanie","Tchad","Togo","Tunisie","Zambie","Zimbabwe"]
-
-const AMERIQUE = ["Antigua-et-Barbuda","Argentine","Bahamas","Barbade","Belize","Bolivie","Brésil","Canada","Chili","Colombie","Costa Rica","Cuba","République Dominicaine","Dominique","Équateur","États-Unis","Grenade","Guatemala","Guyana","Haïti","Honduras","Jamaïque","Mexique","Nicaragua","Panama","Paraguay","Pérou","Saint-Kitts-et-Nevis","Saint-Vincent-et-les-Grenadines","Sainte-Lucie","Salvador","Suriname","Trinité-et-Tobago","Uruguay","Venezuela"]
-
-const ASIE = ["Afghanistan","Arabie Saoudite","Arménie","Azerbaïdjan","Bahreïn","Bangladesh","Bhoutan","Birmanie","Brunei","Cambodge","Chine","Corée du Nord","Corée du Sud","Émirats arabes unis","Géorgie","Inde","Indonésie","Irak","Iran","Israël","Japon","Jordanie","Kazakhstan","Kirghizistan","Koweït","Laos","Liban","Malaisie","Maldives","Mongolie","Népal","Oman","Ouzbékistan","Palestine","Pakistan","Philippines","Qatar","Singapour","Sri Lanka","Syrie","Tadjikistan","Thaïlande","Timor oriental","Turkménistan","Turquie","Viêt Nam","Yémen"]
-
-const OCEANIE = ["Australie","Îles Cook","Fidji","Kiribati","Îles Marshall","Micronésie","Nauru","Niue","Nouvelle-Zélande","Palaos","Papouasie-Nouvelle-Guinée","Salomon","Samoa","Tonga","Tuvalu","Vanuatu"];
-
-const PAYS_CAPITALES = {};
-for (let i = MONDE_FR.length - 1; i >= 0; i--) {
-	PAYS_CAPITALES[MONDE_FR[i]] = CAPITALES[i];
+for (const [key, value] of Object.entries(COUNTRIES)) {
+	COUNTRIES_PER_CONTINENT["world"].push(key);
+	COUNTRIES_PER_CONTINENT[value.continent].push(key);
 }
 
 
 
 
+let language = 1;
+
+function tt(hash) {
+	return TRANSLATION_TABLE[hash][language];
+}
+
+document.getElementById("p_title").innerHTML = tt("Title");
+document.getElementById("button_start_game").innerHTML = tt("Play");
+document.getElementById("button_options").innerHTML = tt("Options");
 
 
 
-
-
-
-//Fonctions Maths Utiles
+//Utils
 
 function randint(min, max) {
 	return (Math.round(Math.random()*max + min));
 }
 
 
-function soustraire_tableau(tab1, tab2) {
-	for (var i = tab1.length - 1; i >= 0; i--) {
-		if (tab2.includes(tab1[i])) {
-			tab1.splice(i, 1);
-		}
-	}
-	return tab1
-}
-
-
-function ressemble(str1, str2) {
+function is_similar(str1, str2) {
   str1 = str1.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/-/g,"").replace(/'/g,"").replace(" ","");
   str2 = str2.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/-/g,"").replace(/'/g,"").replace(" ","");
-  return(str1 == str2)
+  return(str1 == str2);
 }
 
 
@@ -64,21 +44,21 @@ function ressemble(str1, str2) {
 
 //Variables
 
-var score = 0;
-var tour = 0;
-var pays;
-var liste_pays;
-var isPressed = true;
+let current_score = 0;
+let current_turn = 0;
+let selected_country;
+let remaining_countries;
+let is_return_pressed = true;
 const PRINCIPALE = document.getElementById("principale");
-var liste_ereurs = [];
+let errors = [];
 
 //Variables Options
-var options = {
+let options = {
 	enable_flags : true,
-	mode_de_jeu : "simple",
-	nombre_pays : 198,
-	liste_pays_stable : MONDE_FR,
-	continents_selectionnes : {"afrique":true,"amerique":true,"asie":true,"europe":true,"oceanie":true,"erreur":false}
+	gamemode : "simple",
+	number_of_country : 198,
+	selected_countries : COUNTRIES_PER_CONTINENT["world"],
+	selected_continents : {"africa":true,"america":true,"asia":true,"europe":true,"oceania":true,"error":false}
 }
 
 
@@ -91,21 +71,26 @@ var options = {
 
 //Acceuil
 
-function jouer() {
-	switch (options.mode_de_jeu) {
-		case"simple":
-			jouer_simple();
+function start_game() {
+	remaining_countries = [...options.selected_countries];
+	errors = [];
+	switch (options.gamemode) {
+		case "simple":
+			next_turn_simple();
 			break;
-		case"difficile":
-			jouer_difficile();
+		case "hard":
+			next_turn_hard();
 			break;
 	}
 }
 
-function recommencer() {
-	score = 0;
-	tour = 0;
-	PRINCIPALE.innerHTML = '<p>Quiz Capitales</p><button onclick="jouer()" id="bouton">Jouer</button><br><button onclick="option()" id="option">Options</button>'
+function restart() {
+	current_score = 0;
+	current_turn = 0;
+	PRINCIPALE.innerHTML =
+		'<p>' + tt("Title") + '</p>' +
+		'<button onclick="start_game()">' + tt("Play") + '</button>' +
+		'<br><button onclick="show_options()">' + tt("Options") + '</button>';
 }
 
 
@@ -114,60 +99,86 @@ function recommencer() {
 
 
 
-
-
-
-// Difficile
-
-function jouer_difficile() {
-	liste_pays = [...options.liste_pays_stable];
-	liste_ereurs = [];
-	tour_suivant_difficile();
+function show_end_game() {
+	PRINCIPALE.innerHTML =
+		'<p>' + tt("You Have Finished") +
+		'<br>' +
+		tt("Your Score Is") + current_score + ' / ' + current_turn + '</p>' +
+		'<button onclick="restart()">' + tt("Restart") + '</button>';
 }
 
-function tour_suivant_difficile() {
-	if (tour < options.nombre_pays) {
-		pays = liste_pays.splice(randint(0, liste_pays.length - 1), 1);
+
+// Hard
+
+function next_turn_hard() {
+	if (current_turn < options.number_of_country) {
+		selected_country = remaining_countries.splice(randint(0, remaining_countries.length - 1), 1);
+
+		PRINCIPALE.innerHTML =
+			'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
+			'<p>' + tt("Instruction") + selected_country + '</p>' +
+			'<input type="text" id="input_answer" onkeypress="give_answer(event)">' +
+			'<br>' +
+			'<p>' + current_score + ' / ' + current_turn + '</p>';
+
 		if (options.enable_flags) {
-			PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><img src="Drapeaux\\Flag_of_' + TRAD[pays] + '.svg" alt="Drapeau de ' + pays + '" width="250" height="166"><br><br><input type="text" id="reponse" onkeypress="reponse(event)"><br><p>' + score + ' / ' + tour + '</p>';
+			let img_flag = document.createElement("img");
+			img_flag.src = "Drapeaux\\Flag_of_" + selected_country + ".svg";
+			img_flag.alt = tt("Flag Of") + selected_country;
+			img_flag.width = 250;
+			img_flag.height = 166;
+			PRINCIPALE.insertBefore(img_flag, document.getElementById("input_answer"));
+			PRINCIPALE.insertBefore(document.createElement("br"), document.getElementById("input_answer"));
+			PRINCIPALE.insertBefore(document.createElement("br"), document.getElementById("input_answer"));
 		}
-		else {
-			PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><input type="text" id="reponse" onkeypress="reponse(event)"><br><p>' + score + ' / ' + tour + '</p>';
-		}
-		document.getElementById("reponse").focus();
-		tour++;
+		document.getElementById("input_answer").focus();
+		current_turn++;
+		return;
+	}
+	show_end_game();
+}
+
+
+function handle_enter_down(eventKeyboard) {
+	if (eventKeyboard.key == "Enter" && !is_return_pressed) {
+		next_turn_hard();
+		remove_enter_listener();
+	}
+	is_return_pressed = false;
+}
+
+function remove_enter_listener() {
+	document.removeEventListener('keyup', handle_enter_down, true);
+}
+
+function give_answer(event) {
+	let given_answer = document.getElementById("input_answer").value;
+	if (event.key != "Enter" || given_answer == "") {
+		return;
+	}
+
+	document.addEventListener('keyup', handle_enter_down, true);
+	is_return_pressed = true;
+
+	PRINCIPALE.innerHTML =
+		'<button onclick="restart(); removeListener()" id="button_back">' + tt("Back") + '</button>' +
+		'<p id="p_text"></p>' +
+		'<button onclick="next_turn_hard(); remove_enter_listener()">' + tt("Continue") + '</button>' +
+		'<p id="p_score"></p>';
+
+	if (is_similar(given_answer, COUNTRIES[selected_country]["capital"])) {
+		document.getElementById("p_text").innerHTML = 
+			tt("Correct The Capital Of") + selected_country + tt("Is") + COUNTRIES[selected_country]["capital"] +
+			'<br>' +
+			'+1';
+		current_score++;
 	}
 	else {
-		PRINCIPALE.innerHTML = '<p id="texte">Vous avez terminez.<br> Votre score est de ' + score + ' / ' + tour + '</p><button onclick="recommencer()">Recommencer</button>';
+		document.getElementById("p_text").innerHTML =
+			tt("Incorrect The Capital Of") + selected_country + tt("Is") + COUNTRIES[selected_country]["capital"];
+			errors.push(selected_country[0]);
 	}
-}
-
-
-function handleEnterDown(eventKeyboard) {
-	if (eventKeyboard.key == "Enter" && !isPressed) {
-		tour_suivant_difficile();
-		removeListener();
-	}
-	isPressed = false;
-}
-
-function removeListener() {
-	document.removeEventListener('keyup', handleEnterDown, true);
-}
-
-function reponse(event) {
-	if (event.key === "Enter" && document.getElementById("reponse").value != "") {
-		document.addEventListener('keyup', handleEnterDown, true);
-		isPressed = true;
-		if (ressemble(document.getElementById("reponse").value, PAYS_CAPITALES[pays])) {
-			score++;
-			PRINCIPALE.innerHTML = '<button onclick="recommencer(); removeListener()" id="retour">Retour</button><p id="texte">Correct, la capitale de ' + pays + ' était ' + PAYS_CAPITALES[pays] + '<br>+1</p><button onclick="tour_suivant_difficile(); removeListener()">Continuer</button><p>' + score + ' / ' + tour + '</p>';
-		}
-		else {
-			PRINCIPALE.innerHTML = '<button onclick="recommencer(); removeListener()" id="retour">Retour</button><p id="texte">Faux, la capitale de ' + pays + ' était ' + PAYS_CAPITALES[pays] + '</p><button onclick="tour_suivant_difficile(); removeListener()">Continuer</button><p>' + score + ' / ' + tour + '</p>';
-			liste_ereurs.push(pays[0]);
-		}
-	}
+	document.getElementById("p_score").innerHTML = current_score + ' / ' + current_turn;
 }
 
 
@@ -181,43 +192,53 @@ function reponse(event) {
 
 //Simple
 
-function jouer_simple() {
-	liste_pays = [...options.liste_pays_stable];
-	liste_ereurs = [];
-	tour_suivant_simple();
-}
-
-
-function tour_suivant_simple() {
-	if (tour < options.nombre_pays) {
+function next_turn_simple() {
+	if (current_turn < options.number_of_country) {
+		selected_country = remaining_countries.splice(randint(0, remaining_countries.length - 1), 1);
+		PRINCIPALE.innerHTML =
+			'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
+			'<p>' + tt("Instruction") + selected_country + '</p>' +
+			'<button onclick="reveal_answer()" id="button_reveal">' + tt("Reveal Capital") + '</button>' +
+			'<p>' + current_score + ' / ' + current_turn + '</p>';
 		
-		pays = liste_pays.splice(randint(0, liste_pays.length - 1), 1);
+		
 		if (options.enable_flags) {
-			PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><img src="Drapeaux\\Flag_of_' + TRAD[pays] + '.svg" alt="Drapeau de ' + pays + '" width="250" height="166"><br><br><button onclick="reveler_capitale()">Reveler la capitale</button><p>' + score + ' / ' + tour + '</p>';
+			let img_flag = document.createElement("img");
+			img_flag.src = "Drapeaux\\Flag_of_" + selected_country + ".svg";
+			img_flag.alt = tt("Flag Of") + selected_country;
+			img_flag.width = 250;
+			img_flag.height = 166;
+			PRINCIPALE.insertBefore(img_flag, document.getElementById("button_reveal"));
+			PRINCIPALE.insertBefore(document.createElement("br"), document.getElementById("button_reveal"));
+			PRINCIPALE.insertBefore(document.createElement("br"), document.getElementById("button_reveal"));
 		}
-		else {
-			PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">Trouver la capitale de : ' + pays + '</p><button onclick="reveler_capitale()">Reveler la capitale</button><p>' + score + ' / ' + tour + '</p>';
-		}
-		tour++;
+
+		current_turn++;
+		return;
 	}
-	else {
-		PRINCIPALE.innerHTML = '<p id="texte">Vous avez terminez.<br> Votre score est de ' + score + ' / ' + tour + '</p><button onclick="recommencer()">Recommencer</button>';
-	}
+	show_end_game();
 }
 
 
-function reveler_capitale() {
-	PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p id="texte">La capitale de ' + pays + ' est ' + PAYS_CAPITALES[pays] + '. Aviez vous correct ?</p><button onclick="oui()" id="oui">Oui</button><button onclick="non()" id="non">Non</button><p>' + score + ' / ' + (tour - 1) + '</p>';
+function reveal_answer() {
+	PRINCIPALE.innerHTML =
+		'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
+		'<p>' + tt("The Capital Of") + selected_country + tt("Is") + COUNTRIES[selected_country]["capital"] + '. ' + tt("Where You Right") + ' ?</p>' +
+		'<button onclick="validate_correct_answer()">' + tt("Yes") + '</button>' +
+		'<button onclick="validate_incorrect_answer()">' + tt("No") + '</button><p>' +
+		current_score + ' / ' + (current_turn - 1) + '</p>';
 }
 
 
-function oui() {
-	score++;
-	tour_suivant_simple();
+function validate_correct_answer() {
+	current_score++;
+	next_turn_simple();
 }
-function non() {
-	liste_ereurs.push(pays[0]);
-	tour_suivant_simple();
+
+
+function validate_incorrect_answer() {
+	errors.push(selected_country[0]);
+	next_turn_simple();
 }
 
 
@@ -231,76 +252,111 @@ function non() {
 
 //Options
 
-function selection_pays(pays_choisit) {
-	if (document.getElementById("erreur").checked) {
-		options.liste_pays_stable = [];
-		options.continents_selectionnes["erreur"] = false;
-		document.getElementById("erreur").checked = false;
+function choose_continent(continent) {
+	// If nothing is choosen then do nothing
+	if (!document.getElementById("africa").checked &&
+		!document.getElementById("america").checked &&
+		!document.getElementById("asia").checked &&
+		!document.getElementById("europe").checked &&
+		!document.getElementById("oceania").checked &&
+		!document.getElementById("error").checked) {
+		document.getElementById(continent).checked = true;
+		return;
 	}
-	if (!document.getElementById("afrique").checked & !document.getElementById("amerique").checked & !document.getElementById("asie").checked & !document.getElementById("europe").checked & !document.getElementById("oceanie").checked) {
-		document.getElementById(pays_choisit).checked = true;
+	// If a continent is choosen while previous mode was error then it removes error
+	if (document.getElementById("error").checked) {
+		options.selected_countries = [];
+		options.selected_continents["error"] = false;
+		document.getElementById("error").checked = false;
 	}
-	else if (document.getElementById(pays_choisit).checked) {
-		options.liste_pays_stable = options.liste_pays_stable.concat(eval(pays_choisit.toUpperCase()));
-		options.continents_selectionnes[pays_choisit] = true;
+	if (document.getElementById(continent).checked) {
+		options.selected_countries = options.selected_countries.concat(COUNTRIES_PER_CONTINENT[continent]);
+		options.selected_continents[continent] = true;
 	}
 	else {
-		options.liste_pays_stable = soustraire_tableau(options.liste_pays_stable, eval(pays_choisit.toUpperCase()));
-		options.continents_selectionnes[pays_choisit] = false;
+		options.selected_countries = options.selected_countries.filter(
+			item => !COUNTRIES_PER_CONTINENT[continent].includes(item));
+		options.selected_continents[continent] = false;
 	}
-	nb_pays(options.nombre_pays);
+	update_number_of_country(options.number_of_country);
 }
 
 
-function erreur() {
-	if (liste_ereurs.length == 0 & document.getElementById("erreur").checked) {
-		document.getElementById("erreur").checked = false;
-		alert("Vous n'avez pas encore fait d'erreurs")
+function choose_error() {
+	if (errors.length == 0 && document.getElementById("error").checked) {
+		document.getElementById("error").checked = false;
+		alert(tt("Alert Errors"));
+		return;
 	}
-	else if (document.getElementById("erreur").checked) {
-		document.getElementById("afrique").checked = false;
-		document.getElementById("amerique").checked = false;
-		document.getElementById("asie").checked = false;
-		document.getElementById("europe").checked = false;
-		document.getElementById("oceanie").checked = false;
-		options.liste_pays_stable = [...liste_ereurs];
-		options.continents_selectionnes = {"afrique": false,"amerique": false,"asie": false,"europe": false,"oceanie": false,"erreur": true};
-		nb_pays(options.nombre_pays);
+	if (!document.getElementById("error").checked) {
+		document.getElementById("error").checked = true;
+		return;
+	}
+
+	document.getElementById("africa").checked = false;
+	document.getElementById("america").checked = false;
+	document.getElementById("asia").checked = false;
+	document.getElementById("europe").checked = false;
+	document.getElementById("oceania").checked = false;
+	options.selected_countries = [...errors];
+	options.selected_continents = {"africa": false,"america": false,"asia": false,"europe": false,"oceania": false,"error": true};
+	update_number_of_country(options.number_of_country);
+}
+
+
+function update_number_of_country(n) {
+	if (n >= options.selected_countries.length) {
+		document.getElementById("options.number_of_country").value = options.selected_countries.length;
+		options.number_of_country = options.selected_countries.length;
+	}
+	else if (n <= 0) {
+		document.getElementById("options.number_of_country").value = 1;
+		options.number_of_country = 1;
 	}
 	else {
-		document.getElementById("afrique").checked = true;
-		options.liste_pays_stable = [...AFRIQUE];
+		options.number_of_country = n;
 	}
 }
 
 
-function nb_pays(nombre) {
-	if (nombre >= options.liste_pays_stable.length) {
-		document.getElementById("options.nombre_pays").value = options.liste_pays_stable.length;
-		options.nombre_pays = options.liste_pays_stable.length;
-	}
-	else if (nombre <= 0) {
-		document.getElementById("options.nombre_pays").value = 1;
-		options.nombre_pays = 1;
-	}
-	else {
-		options.nombre_pays = nombre;
-	}
+function change_language(new_language) {
+	language = parseInt(new_language);
+	show_options();
 }
 
-
-function option() {
-	PRINCIPALE.innerHTML = '<button onclick="recommencer()" id="retour">Retour</button><p>Drapeaux :<input type="checkbox" id="flags_checkbox" onChange="options.enable_flags = this.checked"></p><p>Mode de Jeu :</p><label for="simple">Simple</label><input type="radio" name="options.mode_de_jeu" id="simple" value="simple" onChange="options.mode_de_jeu = this.value"><br><label for="difficile">Difficile</label><input type="radio" name="options.mode_de_jeu" id="difficile" value="difficile" onChange="options.mode_de_jeu = this.value"><p>Nombre de pays :</p><input type=number value="' + options.nombre_pays + '" id="options.nombre_pays" onInput="nb_pays(this.value)"><p>Pays :</p><p>Afrique<input type="checkbox" onChange="selection_pays(this.id)" id="afrique"><br>Amerique<input type="checkbox" onChange="selection_pays(this.id)" id="amerique"><br>Asie<input type="checkbox" onChange="selection_pays(this.id)" id="asie"><br>Europe<input type="checkbox" onChange="selection_pays(this.id)" id="europe"><br>Oceanie<input type="checkbox" onChange="selection_pays(this.id)" id="oceanie"><br>Erreurs<input type="checkbox" onChange="erreur()" id="erreur"></p>';
-	for (let continent in options.continents_selectionnes) {
-		document.getElementById(continent).checked = options.continents_selectionnes[continent];
+function show_options() {
+	PRINCIPALE.innerHTML =
+		'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
+		'<select name="language" id="select_language" onchange="change_language(this.value)">' +
+		'<option value="1">Français</option>' +
+		'<option value="0">English</option></select>' +
+		'<p>' + tt("Flags") + ' :<input type="checkbox" id="flag_checkbox" onChange="options.enable_flags = this.checked"></p>' +
+		'<p>' + tt("Gamemode") + ' :</p>' +
+		'<label for="simple">' + tt("Simple") + '</label>' +
+		'<input type="radio" name="options.gamemode" id="simple" value="simple" onChange="options.gamemode = this.value">' +
+		'<br>' +
+		'<label for="hard">' + tt("Hard") + '</label>' +
+		'<input type="radio" name="options.gamemode" id="hard" value="hard" onChange="options.gamemode = this.value">' +
+		'<p>' + tt("Number Of Country") + ' :</p>' +
+		'<input type=number value="' + options.selected_countries.length + '" id="options.number_of_country" onInput="update_number_of_country(this.value)">' +
+		'<p>' + tt("Countries") + ' :</p>' +
+		'<p>' + tt("Africa") + '<input type="checkbox" onChange="choose_continent(this.id)" id="africa"><br>' +
+		tt("America") + '<input type="checkbox" onChange="choose_continent(this.id)" id="america"><br>' +
+		tt("Asia") + '<input type="checkbox" onChange="choose_continent(this.id)" id="asia"><br>' +
+		tt("Europe") + '<input type="checkbox" onChange="choose_continent(this.id)" id="europe"><br>' +
+		tt("Oceania") + '<input type="checkbox" onChange="choose_continent(this.id)" id="oceania"><br>' +
+		tt("Errors") + '<input type="checkbox" onChange="choose_error()" id="error"></p>';
+	for (let continent in options.selected_continents) {
+		document.getElementById(continent).checked = options.selected_continents[continent];
 	}
+	document.getElementById("select_language").value = "" + language;
 	if (options.enable_flags) {
-		document.getElementById("flags_checkbox").checked = true;
+		document.getElementById("flag_checkbox").checked = true;
 	}
-	if (options.mode_de_jeu == "simple") {
+	if (options.gamemode == "simple") {
 		document.getElementById("simple").checked = true;
 	}
 	else{
-		document.getElementById("difficile").checked = true;
+		document.getElementById("hard").checked = true;
 	}
 }

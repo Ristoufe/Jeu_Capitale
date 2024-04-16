@@ -1,5 +1,4 @@
-body{
-	background-image: url("carte-monde-pgggays-drapeau.png");
+body {
 	background-color: lightskyblue;
 	background-size: cover;
 	text-align: center;
@@ -7,7 +6,28 @@ body{
 	font-family: Helvetica;
 	padding-top: 1%;
 }
-#principale{
+
+p {
+	font-size: 25px;
+}
+
+button {
+	font-family: Helvetica;
+	font-weight: bold;
+	font-size: 30px;
+	border: 1px solid black;
+	border-radius: 10px;
+}
+
+br {
+	margin-bottom: 8px;
+}
+
+label {
+	font-size: 25px;
+}
+
+#principale {
 	background-color: #e3e3e3;
 	border: 3px solid black;
 	border-radius: 20px;
@@ -16,27 +36,19 @@ body{
 	padding-bottom: 20px;
 	padding-top: 1%;
 }
-p{
-	font-size: 25px;
-}
-button{
-	font-family: Helvetica;
-	font-weight: bold;
-	font-size: 30px;
-	border: 1px solid black;
-	border-radius: 10px;
-}
-#retour{
+
+#button_back {
 	font-weight: initial;
 	font-size: 20px;
 }
-br{
-	margin-bottom: 8px;
-}
-label{
-	font-size: 25px;
-}
-#reponse{
+
+#input_answer {
 	padding: 12px 20px;
 	font-size: 20px;
+}
+
+#select_language {
+	margin-left: 20px;
+	font-weight: initial;
+	font-size: 16px;
 }
