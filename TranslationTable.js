@@ -17,7 +17,7 @@ TRANSLATION_TABLE =
     "Restart": ["Restart", "Recommencer"],
     "Continue": ["Continue", "Continuer"],
     "Correct The Capital Of": ["Correct, the capital of ", "Correct, la capitale de "],
-    "Incorrect The Capital Of": ["Incorrect, the capital of ", ""],
+    "Incorrect The Capital Of": ["Incorrect, the capital of ", "Incorrect, la capitale de "],
     "Alert Errors": ["You have not done any mistakes", "Vous n'avez pas encore fait d'erreurs"],
     "Flags": ["Flags", "Drapeaux"],
     "Gamemode": ["Gamemode", "Mode de Jeu"],

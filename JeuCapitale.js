@@ -140,16 +140,16 @@ function next_turn_hard() {
 }
 
 
-function handle_enter_down(eventKeyboard) {
-	if (eventKeyboard.key == "Enter" && !is_return_pressed) {
+function handle_enter_down_hard(event) {
+	if (event.key == "Enter" && !is_return_pressed) {
 		next_turn_hard();
-		remove_enter_listener();
+		remove_enter_listener_hard();
 	}
 	is_return_pressed = false;
 }
 
-function remove_enter_listener() {
-	document.removeEventListener('keyup', handle_enter_down, true);
+function remove_enter_listener_hard() {
+	document.removeEventListener('keyup', handle_enter_down_hard, true);
 }
 
 function give_answer_hard(event) {
@@ -158,13 +158,13 @@ function give_answer_hard(event) {
 		return;
 	}
 
-	document.addEventListener('keyup', handle_enter_down, true);
+	document.addEventListener('keyup', handle_enter_down_hard, true);
 	is_return_pressed = true;
 
 	PRINCIPALE.innerHTML =
-		'<button onclick="restart(); remove_enter_listener()" id="button_back">' + tt("Back") + '</button>' +
+		'<button onclick="restart(); remove_enter_listener_hard()" id="button_back">' + tt("Back") + '</button>' +
 		'<p id="p_text"></p>' +
-		'<button onclick="next_turn_hard(); remove_enter_listener()">' + tt("Continue") + '</button>' +
+		'<button onclick="next_turn_hard(); remove_enter_listener_hard()">' + tt("Continue") + '</button>' +
 		'<p id="p_score"></p>';
 
 	if (is_similar(given_answer, tt(COUNTRIES[selected_country]["capital"]))) {
@@ -192,9 +192,9 @@ function next_turn_simple() {
 	if (current_turn < options.number_of_country) {
 		selected_country = remaining_countries.splice(randint(0, remaining_countries.length - 1), 1);
 		PRINCIPALE.innerHTML =
-			'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
+			'<button onclick="restart(); remove_enter_listener_simple()" id="button_back">' + tt("Back") + '</button>' +
 			'<p>' + tt("Instruction") + tt(selected_country) + '</p>' +
-			'<button onclick="reveal_answer()" id="button_reveal">' + tt("Reveal Capital") + '</button>' +
+			'<button onclick="reveal_answer(); remove_enter_listener_simple()" id="button_reveal">' + tt("Reveal Capital") + '</button>' +
 			'<p>' + current_score + ' / ' + current_turn + '</p>';
 		
 		
@@ -209,20 +209,51 @@ function next_turn_simple() {
 			PRINCIPALE.insertBefore(document.createElement("br"), document.getElementById("button_reveal"));
 		}
 
+		document.addEventListener('keyup', handle_enter_down_simple, true);
+		is_return_pressed = false;
+
 		current_turn++;
 		return;
 	}
 	show_end_game();
 }
 
+function handle_enter_down_simple(event) {
+	if (event.key == "Enter" && !is_return_pressed) {
+		remove_enter_listener_simple();
+		reveal_answer();
+	}
+	is_return_pressed = false;
+}
+
+function remove_enter_listener_simple() {
+	document.removeEventListener('keyup', handle_v_or_f_down_simple, true);
+}
+
+
+function handle_v_or_f_down_simple(event) {
+	if (event.key == "v") {
+		remove_v_or_f_listener_simple();
+		validate_correct_answer();
+	}
+	else if (event.key == "f") {
+		remove_v_or_f_listener_simple();
+		validate_incorrect_answer();
+	}
+}
+
+function remove_v_or_f_listener_simple() {
+	document.removeEventListener("keyup", handle_v_or_f_down_simple, true);
+}
 
 function reveal_answer() {
 	PRINCIPALE.innerHTML =
-		'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
+		'<button onclick="restart(); remove_v_or_f_listener_simple()" id="button_back">' + tt("Back") + '</button>' +
 		'<p>' + tt("The Capital Of") + tt(selected_country) + tt("Is") + tt(COUNTRIES[selected_country]["capital"]) + '. ' + tt("Where You Right") + ' ?</p>' +
-		'<button onclick="validate_correct_answer()">' + tt("Yes") + '</button>' +
-		'<button onclick="validate_incorrect_answer()">' + tt("No") + '</button><p>' +
+		'<button onclick="validate_correct_answer(); remove_v_or_f_listener_simple()">' + tt("Yes") + '</button>' +
+		'<button onclick="validate_incorrect_answer(); remove_v_or_f_listener_simple()">' + tt("No") + '</button><p>' +
 		current_score + ' / ' + (current_turn - 1) + '</p>';
+	document.addEventListener("keyup", handle_v_or_f_down_simple, true);
 }
 
 
@@ -264,15 +295,15 @@ function next_turn_flag_only() {
 	show_end_game();
 }
 
-function handle_enter_down_flag_only(eventKeyboard) {
-	if (eventKeyboard.key == "Enter" && !is_return_pressed) {
+function handle_enter_down_flag_only(event) {
+	if (event.key == "Enter" && !is_return_pressed) {
 		next_turn_flag_only();
-		remove_flag_only_listener();
+		remove_enter_listener_flag_only();
 	}
 	is_return_pressed = false;
 }
 
-function remove_flag_only_listener() {
+function remove_enter_listener_flag_only() {
 	document.removeEventListener('keyup', handle_enter_down_flag_only, true);
 }
 
@@ -316,9 +347,9 @@ function give_capital_flag_only(event) {
 	is_return_pressed = true;
 
 	PRINCIPALE.innerHTML =
-		'<button onclick="restart(); remove_enter_listener()" id="button_back">' + tt("Back") + '</button>' +
+		'<button onclick="restart(); remove_enter_listener_flag_only()" id="button_back">' + tt("Back") + '</button>' +
 		'<p id="p_text"></p>' +
-		'<button onclick="next_turn_hard(); remove_enter_listener()">' + tt("Continue") + '</button>' +
+		'<button onclick="next_turn_hard(); remove_enter_listener_flag_only()">' + tt("Continue") + '</button>' +
 		'<p id="p_score"></p>';
 	current_turn++;
 
