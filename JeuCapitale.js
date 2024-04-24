@@ -28,14 +28,22 @@ function randint(min, max) {
 	return (Math.round(Math.random()*max + min));
 }
 
-
 function is_similar(str1, str2) {
   str1 = str1.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/-/g,"").replace(/'/g,"").replace(" ","");
   str2 = str2.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/-/g,"").replace(/'/g,"").replace(" ","");
   return(str1 == str2);
 }
 
-
+function time_to_string(time) {
+	let seconds = time % 60 < 10 ? "0" + time % 60 : time % 60;
+	let minutes = time % 3600 / 60 < 10 ?
+		"0" + Math.floor(time%3600/60) :
+		Math.floor(time%3600/60);
+	if (time < 3600) {
+		return minutes + ":" + seconds;
+	}
+	return Math.floor(time/3600) + ":" + minutes + ":" + seconds;
+}
 
 
 
@@ -51,11 +59,14 @@ let current_turn = 0;
 let selected_country;
 let remaining_countries;
 let is_return_pressed = true;
+let timer = 0;
 const PRINCIPALE = document.getElementById("principale");
 let errors = [];
 
 // Variables Options
 let options = {
+	enable_timer : false,
+	timer_interval_id : null,
 	enable_flags : true,
 	gamemode : "simple",
 	number_of_country : 198,
@@ -76,6 +87,10 @@ let options = {
 function start_game() {
 	remaining_countries = [...options.selected_countries];
 	errors = [];
+	timer = 0;
+	if (options.enable_timer) {
+		options.timer_interval_id = setInterval(increase_timer, 1000);
+	}
 	switch (options.gamemode) {
 		case "simple":
 			next_turn_simple();
@@ -90,6 +105,9 @@ function start_game() {
 }
 
 function restart() {
+	if (options.enable_timer) {
+		clearInterval(options.timer_interval_id);
+	}
 	current_score = 0;
 	current_turn = 0;
 	PRINCIPALE.innerHTML =
@@ -102,8 +120,19 @@ function show_end_game() {
 	PRINCIPALE.innerHTML =
 		'<p>' + tt("You Have Finished") +
 		'<br>' +
-		tt("Your Score Is") + current_score + ' / ' + current_turn + '</p>' +
+		tt("Your Score Is") + current_score + ' / ' + current_turn +
+		(options.enable_timer?
+			'<br>' + tt("Your Time Is") + time_to_string(timer): '') +
+		'</p>' +
 		'<button onclick="restart()">' + tt("Restart") + '</button>';
+}
+
+function increase_timer() {
+	timer++;
+	let timer_display = document.getElementById("span_timer");
+	if (timer_display) {
+		timer_display.innerHTML = time_to_string(timer);
+	}
 }
 
 // #endregion
@@ -118,20 +147,14 @@ function next_turn_hard() {
 		PRINCIPALE.innerHTML =
 			'<button onclick="restart()" id="button_back">' + tt("Back") + '</button>' +
 			'<p>' + tt("Instruction") + tt(selected_country) + '</p>' +
+			(options.enable_flags ?
+				'<img src="Drapeaux\\Flag_of_' + selected_country + '.svg"' +
+				'alt="' + tt("Flag Of") + tt(selected_country) + '" width="250" height="166"><br><br>': '') +
 			'<input type="text" id="input_answer" onkeypress="give_answer_hard(event)">' +
 			'<br>' +
-			'<p>' + current_score + ' / ' + current_turn + '</p>';
+			'<p>' + current_score + ' / ' + current_turn + '</p>' +
+			(options.enable_timer ? '<span id="span_timer">' + time_to_string(timer) + '</span>' : '');
 
-		if (options.enable_flags) {
-			let img_flag = document.createElement("img");
-			img_flag.src = "Drapeaux\\Flag_of_" + selected_country + ".svg";
-			img_flag.alt = tt("Flag Of") + tt(selected_country);
-			img_flag.width = 250;
-			img_flag.height = 166;
-			PRINCIPALE.insertBefore(img_flag, document.getElementById("input_answer"));
-			PRINCIPALE.insertBefore(document.createElement("br"), document.getElementById("input_answer"));
-			PRINCIPALE.insertBefore(document.createElement("br"), document.getElementById("input_answer"));
-		}
 		document.getElementById("input_answer").focus();
 		current_turn++;
 		return;
@@ -165,7 +188,8 @@ function give_answer_hard(event) {
 		'<button onclick="restart(); remove_enter_listener_hard()" id="button_back">' + tt("Back") + '</button>' +
 		'<p id="p_text"></p>' +
 		'<button onclick="next_turn_hard(); remove_enter_listener_hard()">' + tt("Continue") + '</button>' +
-		'<p id="p_score"></p>';
+		'<p id="p_score"></p>' +
+		(options.enable_timer ? '<span id="span_timer">' + time_to_string(timer) + '</span>' : '');
 
 	if (is_similar(given_answer, tt(COUNTRIES[selected_country]["capital"]))) {
 		document.getElementById("p_text").innerHTML = 
@@ -192,22 +216,14 @@ function next_turn_simple() {
 	if (current_turn < options.number_of_country) {
 		selected_country = remaining_countries.splice(randint(0, remaining_countries.length - 1), 1);
 		PRINCIPALE.innerHTML =
-			'<button onclick="restart(); remove_enter_listener_simple()" id="button_back">' + tt("Back") + '</button>' +
+			'<button onclick="remove_enter_listener_simple(); restart()" id="button_back">' + tt("Back") + '</button>' +
 			'<p>' + tt("Instruction") + tt(selected_country) + '</p>' +
+			(options.enable_flags ?
+				'<img src="Drapeaux\\Flag_of_' + selected_country + '.svg"' +
+				'alt="' + tt("Flag Of") + tt(selected_country) + '" width="250" height="166"><br><br>': '') +
 			'<button onclick="reveal_answer(); remove_enter_listener_simple()" id="button_reveal">' + tt("Reveal Capital") + '</button>' +
-			'<p>' + current_score + ' / ' + current_turn + '</p>';
-		
-		
-		if (options.enable_flags) {
-			let img_flag = document.createElement("img");
-			img_flag.src = "Drapeaux\\Flag_of_" + selected_country + ".svg";
-			img_flag.alt = tt("Flag Of") + tt(selected_country);
-			img_flag.width = 250;
-			img_flag.height = 166;
-			PRINCIPALE.insertBefore(img_flag, document.getElementById("button_reveal"));
-			PRINCIPALE.insertBefore(document.createElement("br"), document.getElementById("button_reveal"));
-			PRINCIPALE.insertBefore(document.createElement("br"), document.getElementById("button_reveal"));
-		}
+			'<p>' + current_score + ' / ' + current_turn + '</p>' +
+			(options.enable_timer ? '<span id="span_timer">' + time_to_string(timer) + '</span>' : '');
 
 		document.addEventListener('keyup', handle_enter_down_simple, true);
 		is_return_pressed = false;
@@ -227,7 +243,7 @@ function handle_enter_down_simple(event) {
 }
 
 function remove_enter_listener_simple() {
-	document.removeEventListener('keyup', handle_v_or_f_down_simple, true);
+	document.removeEventListener('keyup', handle_enter_down_simple, true);
 }
 
 
@@ -248,11 +264,12 @@ function remove_v_or_f_listener_simple() {
 
 function reveal_answer() {
 	PRINCIPALE.innerHTML =
-		'<button onclick="restart(); remove_v_or_f_listener_simple()" id="button_back">' + tt("Back") + '</button>' +
+		'<button onclick="remove_v_or_f_listener_simple(); restart()" id="button_back">' + tt("Back") + '</button>' +
 		'<p>' + tt("The Capital Of") + tt(selected_country) + tt("Is") + tt(COUNTRIES[selected_country]["capital"]) + '. ' + tt("Where You Right") + ' ?</p>' +
 		'<button onclick="validate_correct_answer(); remove_v_or_f_listener_simple()">' + tt("Yes") + '</button>' +
 		'<button onclick="validate_incorrect_answer(); remove_v_or_f_listener_simple()">' + tt("No") + '</button><p>' +
-		current_score + ' / ' + (current_turn - 1) + '</p>';
+		current_score + ' / ' + (current_turn - 1) + '</p>' +
+		(options.enable_timer ? '<span id="span_timer">' + time_to_string(timer) + '</span>' : '');
 	document.addEventListener("keyup", handle_v_or_f_down_simple, true);
 }
 
@@ -286,7 +303,8 @@ function next_turn_flag_only() {
 			'<br>' +
 			'<input type="text" id="input_answer" onkeypress="give_country_flag_only(event)">' +
 			'<br>' +
-			'<p>' + current_score + ' / ' + current_turn + '</p>';
+			'<p>' + current_score + ' / ' + current_turn + '</p>' +
+			(options.enable_timer ? '<span id="span_timer">' + time_to_string(timer) + '</span>' : '');
 		
 		document.getElementById("input_answer").focus();
 		current_turn++;
@@ -318,7 +336,8 @@ function give_country_flag_only(event) {
 		'<p id="p_text"></p>' +
 		'<p>' + tt("Instruction Flag Only Capital") + '</p>' +
 		'<input type="text" id="input_answer" onkeypress="give_capital_flag_only(event)">' +
-		'<p id="p_score"></p>';
+		'<p id="p_score"></p>' +
+		(options.enable_timer ? '<span id="span_timer">' + time_to_string(timer) + '</span>' : '');
 
 	document.getElementById("input_answer").focus();
 
@@ -350,7 +369,8 @@ function give_capital_flag_only(event) {
 		'<button onclick="restart(); remove_enter_listener_flag_only()" id="button_back">' + tt("Back") + '</button>' +
 		'<p id="p_text"></p>' +
 		'<button onclick="next_turn_hard(); remove_enter_listener_flag_only()">' + tt("Continue") + '</button>' +
-		'<p id="p_score"></p>';
+		'<p id="p_score"></p>' +
+		(options.enable_timer ? '<span id="span_timer">' + time_to_string(timer) + '</span>' : '');
 	current_turn++;
 
 	if (is_similar(given_answer, tt(COUNTRIES[selected_country]["capital"]))) {
@@ -369,6 +389,7 @@ function give_capital_flag_only(event) {
 }
 
 // #endregion
+
 
 // #region Options
 
@@ -450,7 +471,8 @@ function show_options() {
 		'<select name="language" id="select_language" onchange="change_language(this.value)">' +
 		'<option value="1">Français</option>' +
 		'<option value="0">English</option></select>' +
-		'<p>' + tt("Flags") + ' :<input type="checkbox" id="flag_checkbox" onChange="options.enable_flags = this.checked"></p>' +
+		'<p>' + tt("Flags") + ' :<input type="checkbox" id="flag_checkbox" onChange="options.enable_flags = this.checked">' +
+		'<br>' + tt("Timer") + ' :<input type="checkbox" id="timer_checkbox" onChange="options.enable_timer = this.checked"></p>' +
 		'<p>' + tt("Gamemode") + ' :</p>' +
 		'<label for="simple">' + tt("Simple") + '</label>' +
 		'<input type="radio" name="radio_gamemode" id="simple" value="simple" onChange="options.gamemode = this.value">' +
@@ -462,8 +484,8 @@ function show_options() {
 		'<input type="radio" name="radio_gamemode" id="flag_only" value="flag_only" onChange="options.gamemode = this.value">' +
 		'<p>' + tt("Number Of Country") + ' :</p>' +
 		'<input type=number value="' + options.selected_countries.length + '" id="options.number_of_country" onInput="update_number_of_country(this.value)">' +
-		'<p>' + tt("Countries") + ' :</p>' +
-		'<p>' + tt("Africa") + '<input type="checkbox" onChange="choose_continent(this.id)" id="africa"><br>' +
+		'<p>' + tt("Countries") + ' :<br>' +
+		tt("Africa") + '<input type="checkbox" onChange="choose_continent(this.id)" id="africa"><br>' +
 		tt("America") + '<input type="checkbox" onChange="choose_continent(this.id)" id="america"><br>' +
 		tt("Asia") + '<input type="checkbox" onChange="choose_continent(this.id)" id="asia"><br>' +
 		tt("Europe") + '<input type="checkbox" onChange="choose_continent(this.id)" id="europe"><br>' +
@@ -472,10 +494,9 @@ function show_options() {
 	for (let continent in options.selected_continents) {
 		document.getElementById(continent).checked = options.selected_continents[continent];
 	}
-	document.getElementById("select_language").value = "" + language;
-	if (options.enable_flags) {
-		document.getElementById("flag_checkbox").checked = true;
-	}
+	document.getElementById("select_language").value = language;
+	document.getElementById("flag_checkbox").checked = options.enable_flags;
+	document.getElementById("timer_checkbox").checked = options.enable_timer;
 	document.getElementById(options.gamemode).checked = true;
 }
 

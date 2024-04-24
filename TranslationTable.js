@@ -1,6 +1,7 @@
 TRANSLATION_TABLE =
 {
     "Play": ["Play", "Jouer"],
+    "Timer" : ["Timer", "Chronomètre"],
     "Options": ["Options", "Options"],
     "Title": ["Quiz Capitals", "Quiz Capitales"],
     "Back": ["Back", "Retour"],
@@ -37,6 +38,7 @@ TRANSLATION_TABLE =
     "Instruction Flag Only Capital": ["What is the capital of this country ?", "Quelle est la capitale de ce pays ?"],
     "Correct, The Country Was": ["Correct, the flag was the flag of ", "Correct, le drapeau était celui de "],
     "Incorrect, The Country Was": ["Incorrect, the flag was the flag of ", "Faux, le drapeau était celui de "],
+    "Your Time Is": ["Your final time is ", "Votre temps final est "],
     
     "South_Africa": ["South Africa", "Afrique du Sud"],
     "Afghanistan": ["Afghanistan", "Afghanistan"],
